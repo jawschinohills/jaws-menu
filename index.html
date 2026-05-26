@@ -5,66 +5,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jaws Topokki Menu</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; min-height: 100vh; }
-  .wrapper { max-width: 480px; margin: 0 auto; background: white; min-height: 100vh; }
-  .menu-header { background: #D32F2F; color: white; text-align: center; padding: 20px 16px 16px; }
-  .menu-header h1 { font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
-  .menu-header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
-  .spicy-note { background: #FFF3E0; color: #BF360C; font-size: 13px; text-align: center; padding: 8px; border-bottom: 1px solid #FFCC80; }
-  .tab-bar { display: flex; overflow-x: auto; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; scrollbar-width: none; }
-  .tab-bar::-webkit-scrollbar { display: none; }
-  .tab-btn { flex: 0 0 auto; padding: 12px 16px; font-size: 13px; font-weight: 500; color: #888; border: none; background: transparent; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
-  .tab-btn.active { color: #D32F2F; border-bottom-color: #D32F2F; }
-  .section { display: none; padding: 14px; }
-  .section.active { display: block; }
-  .section-title { font-size: 12px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
-  .section-title:first-child { margin-top: 4px; }
-  .item-card { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
-  .item-card:last-child { border-bottom: none; }
-  .item-info { flex: 1; }
-  .item-name { font-size: 15px; font-weight: 500; color: #222; line-height: 1.3; }
-  .item-desc { font-size: 13px; color: #888; margin-top: 3px; line-height: 1.4; }
-  .item-price { font-size: 15px; font-weight: 600; color: #D32F2F; white-space: nowrap; }
-  .badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; margin-left: 5px; vertical-align: middle; font-weight: 500; }
-  .badge-spicy { background: #FFEBEE; color: #C62828; }
-  .badge-veg { background: #E8F5E9; color: #2E7D32; }
-  .badge-popular { background: #FFF8E1; color: #E65100; }
-  .set-card { background: #fafafa; border-radius: 10px; padding: 14px; margin-bottom: 10px; border: 1px solid #eee; }
-  .set-card .set-name { font-size: 15px; font-weight: 600; color: #222; }
-  .set-card .set-includes { font-size: 13px; color: #666; margin-top: 5px; line-height: 1.5; }
-  .set-card .set-price { font-size: 18px; font-weight: 700; color: #D32F2F; margin-top: 8px; }
-  .set-card .set-note { font-size: 11px; color: #aaa; margin-top: 2px; }
-  .upgrade-note { background: #FFF3E0; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #E65100; margin-bottom: 12px; border: 1px solid #FFCC80; line-height: 1.5; }
-  .weekday-card { border-radius: 10px; border: 1px solid #eee; overflow: hidden; margin-bottom: 10px; }
-  .weekday-header { background: #D32F2F; color: white; padding: 8px 14px; font-size: 13px; font-weight: 600; }
-  .weekday-body { padding: 12px 14px; background: white; }
-  .weekday-deal { font-size: 14px; font-weight: 600; color: #222; }
-  .weekday-inc { font-size: 12px; color: #888; margin-top: 2px; }
-  .weekday-price { font-size: 17px; font-weight: 700; color: #D32F2F; margin-top: 6px; }
-  .sauce-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-  .sauce-item { background: #fafafa; border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 500; color: #333; border: 1px solid #eee; }
-  .sauce-item span { font-size: 12px; color: #D32F2F; display: block; margin-top: 2px; }
-  .topping-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #444; }
-  .topping-row:last-child { border-bottom: none; }
-  .ramen-combo { background: #fafafa; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; border: 1px solid #eee; }
-  .ramen-combo .combo-name { font-size: 14px; font-weight: 600; color: #222; }
-  .ramen-combo .combo-inc { font-size: 12px; color: #888; margin-top: 3px; }
-  .ramen-combo .combo-price { font-size: 15px; font-weight: 700; color: #D32F2F; margin-top: 5px; }
-  .party-box { background: #FFEBEE; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #FFCDD2; margin-top: 10px; }
-  .party-box .party-price { font-size: 36px; font-weight: 700; color: #C62828; }
-  .party-box .party-desc { font-size: 14px; color: #B71C1C; margin-top: 6px; }
-  .footer { padding: 16px; text-align: center; font-size: 11px; color: #bbb; border-top: 1px solid #f0f0f0; margin-top: 8px; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh}
+  .wrapper{max-width:480px;margin:0 auto;background:white;min-height:100vh}
+  .menu-header{background:#D32F2F;color:white;text-align:center;padding:20px 16px 16px}
+  .menu-header h1{font-size:24px;font-weight:700}
+  .menu-header p{font-size:13px;opacity:.85;margin-top:4px}
+  .spicy-note{background:#FFF3E0;color:#BF360C;font-size:13px;text-align:center;padding:8px;border-bottom:1px solid #FFCC80}
+  .tab-bar{display:flex;overflow-x:auto;background:white;border-bottom:1px solid #eee;position:sticky;top:0;z-index:10;scrollbar-width:none}
+  .tab-bar::-webkit-scrollbar{display:none}
+  .tab-btn{flex:0 0 auto;padding:12px 14px;font-size:13px;font-weight:500;color:#888;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+  .tab-btn.active{color:#D32F2F;border-bottom-color:#D32F2F}
+  .section{display:none;padding:14px}
+  .section.active{display:block}
+  .sec-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid #eee}
+  .sec-title:first-child{margin-top:2px}
+  .item-card{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #f0f0f0}
+  .item-card:last-child{border-bottom:none}
+  .item-img{width:70px;height:70px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f5f5f5}
+  .item-info{flex:1;min-width:0}
+  .item-name{font-size:14px;font-weight:600;color:#222;line-height:1.3}
+  .item-desc{font-size:12px;color:#888;margin-top:3px;line-height:1.4}
+  .item-price{font-size:14px;font-weight:700;color:#D32F2F;white-space:nowrap;flex-shrink:0}
+  .badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle;font-weight:600}
+  .bs{background:#FFEBEE;color:#C62828}
+  .bv{background:#E8F5E9;color:#2E7D32}
+  .bp{background:#FFF8E1;color:#E65100}
+  .set-card{background:#fafafa;border-radius:12px;padding:13px;margin-bottom:10px;border:1px solid #eee;display:flex;gap:12px;align-items:center}
+  .set-img{width:90px;height:90px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f5f5f5}
+  .set-body{flex:1}
+  .set-name{font-size:15px;font-weight:700;color:#222}
+  .set-inc{font-size:12px;color:#666;margin-top:5px;line-height:1.5}
+  .set-price{font-size:18px;font-weight:700;color:#D32F2F;margin-top:6px}
+  .set-note{font-size:11px;color:#aaa;margin-top:2px}
+  .upgrade-note{background:#FFF3E0;border-radius:8px;padding:10px 14px;font-size:12px;color:#E65100;margin-bottom:12px;border:1px solid #FFCC80;line-height:1.6}
+  .wday-card{border-radius:10px;border:1px solid #eee;overflow:hidden;margin-bottom:9px;display:flex;align-items:stretch}
+  .wday-label{background:#D32F2F;color:white;writing-mode:vertical-rl;text-orientation:mixed;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;min-width:34px;padding:4px 0}
+  .wday-img{width:85px;height:85px;object-fit:cover;flex-shrink:0}
+  .wday-body{padding:10px 13px;flex:1}
+  .wday-deal{font-size:14px;font-weight:600;color:#222}
+  .wday-inc{font-size:11px;color:#888;margin-top:2px}
+  .wday-price{font-size:16px;font-weight:700;color:#D32F2F;margin-top:4px}
+  .ramen-card{display:flex;align-items:center;gap:12px;padding:11px;background:#fafafa;border-radius:10px;margin-bottom:8px;border:1px solid #eee}
+  .ramen-img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#f5f5f5}
+  .ramen-info{flex:1}
+  .ramen-name{font-size:14px;font-weight:600;color:#222}
+  .ramen-price{font-size:14px;font-weight:700;color:#D32F2F;margin-top:4px}
+  .sauce-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+  .sauce-item{background:#fafafa;border-radius:8px;padding:10px 12px;font-size:13px;font-weight:500;color:#333;border:1px solid #eee}
+  .sauce-item span{font-size:12px;color:#D32F2F;display:block;margin-top:2px}
+  .trow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:13px;color:#444}
+  .trow:last-child{border-bottom:none}
+  .tprice{color:#D32F2F;font-weight:700}
+  .party-box{background:#FFEBEE;border-radius:12px;overflow:hidden;border:1px solid #FFCDD2;margin-top:10px}
+  .party-img{width:100%;height:160px;object-fit:cover}
+  .party-info{padding:14px;text-align:center}
+  .party-price{font-size:36px;font-weight:700;color:#C62828}
+  .party-desc{font-size:14px;color:#B71C1C;margin-top:4px}
+  .footer{padding:16px;text-align:center;font-size:11px;color:#bbb;border-top:1px solid #f0f0f0;margin-top:8px}
 </style>
 </head>
 <body>
 <div class="wrapper">
-  <div class="menu-header">
-    <h1>🔥 Jaws Topokki</h1>
-    <p>Korean Street Food · Chino Hills, CA</p>
-  </div>
+  <div class="menu-header"><h1>🔥 Jaws Topokki</h1><p>Korean Street Food · Chino Hills, CA</p></div>
   <div class="spicy-note">Spicy level: Mild 🌶 · Regular 🌶🌶 · Spicy 🌶🌶🌶</div>
-
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('topokki',this)">Topokki</button>
     <button class="tab-btn" onclick="showTab('sets',this)">Set Menu</button>
@@ -79,131 +83,121 @@
 
   <!-- TOPOKKI -->
   <div id="tab-topokki" class="section active">
-    <div class="item-card"><div class="item-info"><div class="item-name">Jaws Topokki Soup <span class="badge badge-popular">Signature</span></div><div class="item-desc">Jaws signature topokki soup</div></div><div class="item-price">$14.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Half-Size Topokki</div><div class="item-desc">Rose or Jajang (+$1.50)</div></div><div class="item-price">$8.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Cheese Topokki</div><div class="item-desc">Mozzarella cheese</div></div><div class="item-price">$16.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Rose Topokki <span class="badge badge-popular">Popular</span></div><div class="item-desc">Real cream / spicy rose / rose sauce</div></div><div class="item-price">$16.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Jajang Topokki</div><div class="item-desc">Korea Chinese cuisine black bean sauce</div></div><div class="item-price">$16.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Mala Topokki <span class="badge badge-spicy">Spicy</span></div><div class="item-desc">Spicy, numbing mala-style topokki w/ beef brisket</div></div><div class="item-price">$18.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Mala Rose Topokki <span class="badge badge-popular">Popular</span></div><div class="item-desc">Creamy, milder "rose" version of mala w/ beef brisket</div></div><div class="item-price">$19.99</div></div>
-    <div class="section-title">Toppings (+$2.50 each)</div>
-    <div class="item-desc" style="font-size:13px;color:#888;padding:8px 0;line-height:1.8;">Cheese · Ramen · Fish Cake · Quail Eggs · Bulgogi · Beef Brisket (+$4) · Sausage · Wide Glass Noodle</div>
+    <div class="item-card"><img class="item-img" src="images/topokki_jaws.jpg" alt="Jaws Topokki Soup"><div class="item-info"><div class="item-name">Jaws Topokki Soup <span class="badge bp">Signature</span></div><div class="item-desc">Jaws signature topokki soup</div><div class="item-desc" style="color:#bbb">Half-Size: $8.99</div></div><div class="item-price">$14.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/topokki_cheese.jpg" alt="Cheese Topokki"><div class="item-info"><div class="item-name">Cheese Topokki</div><div class="item-desc">Mozzarella cheese</div></div><div class="item-price">$16.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/topokki_rose.jpg" alt="Rose Topokki"><div class="item-info"><div class="item-name">Rose Topokki <span class="badge bp">Popular</span></div><div class="item-desc">Real cream / spicy rose / rose sauce</div></div><div class="item-price">$16.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/topokki_jajang.jpg" alt="Jajang Topokki"><div class="item-info"><div class="item-name">Jajang Topokki</div><div class="item-desc">Korean Chinese black bean sauce</div></div><div class="item-price">$16.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/topokki_mala.jpg" alt="Mala Topokki"><div class="item-info"><div class="item-name">Mala Topokki <span class="badge bs">Spicy</span></div><div class="item-desc">Spicy, numbing mala-style w/ beef brisket</div></div><div class="item-price">$18.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/topokki_mala_rose.jpg" alt="Mala Rose Topokki"><div class="item-info"><div class="item-name">Mala Rose Topokki <span class="badge bp">Popular</span></div><div class="item-desc">Creamy, milder rose version w/ beef brisket</div></div><div class="item-price">$19.99</div></div>
+    <div class="sec-title">Toppings (+$2.50 each)</div>
+    <div style="font-size:13px;color:#888;padding:6px 0;line-height:1.9">Cheese · Ramen · Fish Cake · Quail Eggs · Bulgogi · Beef Brisket (+$4) · Sausage · Wide Glass Noodle</div>
   </div>
 
   <!-- SET MENU -->
   <div id="tab-sets" class="section">
-    <div class="upgrade-note">All set menu topokki can be changed to:<br>Rose or Jajang (+$1) · Mala (+$2) · Mala Rose (+$3)</div>
-    <div class="set-card"><div class="set-name">Duo Set <span class="badge badge-popular">For 2</span></div><div class="set-includes">Jaws Topokki Soup (×2)<br>+ Deep Fried Set (M)</div><div class="set-price">$23.99</div></div>
-    <div class="set-card"><div class="set-name">Friend Set <span class="badge badge-popular">For 3</span></div><div class="set-includes">Jaws Topokki Soup (×3)<br>+ Deep Fried Set (M)<br>+ Jaws Korean Sausage</div><div class="set-price">$30.99</div><div class="set-note">Large size upgrade +$2.00</div></div>
-    <div class="set-card"><div class="set-name">Jaws Combo</div><div class="set-includes">Jaws Topokki Soup<br>+ Jaws Fried Chicken<br>+ Seaweed Rolls & Dumplings</div><div class="set-price">$31.99</div></div>
-    <div class="set-card"><div class="set-name">Jawsome Set <span class="badge badge-popular">For 3–4</span></div><div class="set-includes">Jaws Topokki Soup<br>+ Deep Fried Set (L)<br>+ Jaws Korean Sausage<br>+ Assorted Fish Cake Soup</div><div class="set-price">$40.99</div></div>
+    <div class="upgrade-note">Topokki can be changed to:<br>Rose or Jajang (+$1) · Mala (+$2) · Mala Rose (+$3)</div>
+    <div class="set-card"><img class="set-img" src="images/set_duo.jpg" alt="Duo Set"><div class="set-body"><div class="set-name">Duo Set <span class="badge bp">For 2</span></div><div class="set-inc">Jaws Topokki Soup ×2<br>+ Deep Fried Set (M)</div><div class="set-price">$23.99</div></div></div>
+    <div class="set-card"><img class="set-img" src="images/set_friend.jpg" alt="Friend Set"><div class="set-body"><div class="set-name">Friend Set <span class="badge bp">For 3</span></div><div class="set-inc">Jaws Topokki Soup ×3<br>+ Deep Fried Set (M)<br>+ Jaws Korean Sausage</div><div class="set-price">$30.99</div><div class="set-note">Large size upgrade +$2.00</div></div></div>
+    <div class="set-card"><img class="set-img" src="images/set_combo.jpg" alt="Jaws Combo"><div class="set-body"><div class="set-name">Jaws Combo</div><div class="set-inc">Jaws Topokki Soup<br>+ Jaws Fried Chicken<br>+ Seaweed Rolls & Dumplings</div><div class="set-price">$31.99</div></div></div>
+    <div class="set-card"><img class="set-img" src="images/set_jawsome.jpg" alt="Jawsome Set"><div class="set-body"><div class="set-name">Jawsome Set <span class="badge bp">For 3–4</span></div><div class="set-inc">Jaws Topokki Soup<br>+ Deep Fried Set (L)<br>+ Jaws Korean Sausage<br>+ Assorted Fish Cake Soup</div><div class="set-price">$40.99</div></div></div>
   </div>
 
   <!-- RICE BOWL -->
   <div id="tab-rice" class="section">
-    <div class="item-card"><div class="item-info"><div class="item-name">Chicken Mayo Rice Bowl</div><div class="item-desc">Fried chicken, mayo & seaweed teriyaki sauce</div></div><div class="item-price">$13.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Tuna Mayo Rice Bowl</div><div class="item-desc">Tuna mayo salad & seaweed tempura flakes</div></div><div class="item-price">$13.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Chicken Galbi Rice Bowl</div><div class="item-desc">Flame broiled chicken soy sauce BBQ</div></div><div class="item-price">$13.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Spicy Pork Rice Bowl <span class="badge badge-spicy">Spicy</span></div><div class="item-desc">Sweet & spicy flame broiled Korean favorite</div></div><div class="item-price">$13.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Bulgogi Rice Bowl</div><div class="item-desc">Flame broiled sweet & salty BBQ</div></div><div class="item-price">$13.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/rice_chicken_mayo.jpg" alt="Chicken Mayo Rice Bowl"><div class="item-info"><div class="item-name">Chicken Mayo Rice Bowl</div><div class="item-desc">Fried chicken, mayo & seaweed teriyaki sauce</div></div><div class="item-price">$13.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/rice_tuna_mayo.jpg" alt="Tuna Mayo Rice Bowl"><div class="item-info"><div class="item-name">Tuna Mayo Rice Bowl</div><div class="item-desc">Tuna mayo salad & seaweed tempura flakes</div></div><div class="item-price">$13.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/rice_chicken_galbi.jpg" alt="Chicken Galbi Rice Bowl"><div class="item-info"><div class="item-name">Chicken Galbi Rice Bowl</div><div class="item-desc">Flame broiled chicken soy sauce BBQ</div></div><div class="item-price">$13.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/rice_spicy_pork.jpg" alt="Spicy Pork Rice Bowl"><div class="item-info"><div class="item-name">Spicy Pork Rice Bowl <span class="badge bs">Spicy</span></div><div class="item-desc">Sweet & spicy flame broiled Korean favorite</div></div><div class="item-price">$13.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/rice_bulgogi.jpg" alt="Bulgogi Rice Bowl"><div class="item-info"><div class="item-name">Bulgogi Rice Bowl</div><div class="item-desc">Flame broiled sweet & salty BBQ</div></div><div class="item-price">$13.99</div></div>
   </div>
 
   <!-- GIMBAP -->
   <div id="tab-gimbap" class="section">
-    <div class="item-card"><div class="item-info"><div class="item-name">Bareun Gimbap <span class="badge badge-popular">Signature</span></div><div class="item-desc">Fresh ingredients</div></div><div class="item-price">$8.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Tofu Gimbap <span class="badge badge-veg">Vegetarian</span></div><div class="item-desc">Healthy tofu, stuffed savory flavor</div></div><div class="item-price">$8.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Spicy Fish Cake Gimbap <span class="badge badge-spicy">Spicy</span></div><div class="item-desc">Stir fry fish cake</div></div><div class="item-price">$9.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Tuna Gimbap</div><div class="item-desc">Tuna salad, mayo flavor, fragrant sesame leaf</div></div><div class="item-price">$9.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Spicy Pork Wrap Gimbap <span class="badge badge-spicy">Spicy</span></div><div class="item-desc">Korean spicy pork, lettuce wrap</div></div><div class="item-price">$9.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Fried Shrimp Gimbap</div><div class="item-desc">Shrimp fries, savory</div></div><div class="item-price">$10.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Chicken Galbi Gimbap</div><div class="item-desc">Flame broiled chicken, soy sauce BBQ</div></div><div class="item-price">$10.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Bulgogi Gimbap</div><div class="item-desc">Sweet and salty bulgogi, soy sauce flavor</div></div><div class="item-price">$10.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Keto Gimbap</div><div class="item-desc">Low carb, diet & well-being food</div></div><div class="item-price">$10.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Fried Chicken Mayo Gimbap</div><div class="item-desc">Fried chicken & mayo</div></div><div class="item-price">$10.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Beef Rib Gimbap</div><div class="item-desc">Flame broiled beef rib BBQ</div></div><div class="item-price">$10.99</div></div>
-    <div class="section-title">Party Platter</div>
-    <div class="party-box"><div class="party-price">$50</div><div class="party-desc">Choose your own — pick any 5 kimbap rolls</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_bareun.jpg" alt="Bareun Gimbap"><div class="item-info"><div class="item-name">Bareun Gimbap <span class="badge bp">Signature</span></div><div class="item-desc">Fresh ingredients</div></div><div class="item-price">$8.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_tofu.jpg" alt="Tofu Gimbap"><div class="item-info"><div class="item-name">Tofu Gimbap <span class="badge bv">Vegetarian</span></div><div class="item-desc">Healthy tofu, stuffed savory flavor</div></div><div class="item-price">$8.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_fishcake.jpg" alt="Spicy Fish Cake Gimbap"><div class="item-info"><div class="item-name">Spicy Fish Cake Gimbap <span class="badge bs">Spicy</span></div><div class="item-desc">Stir fry fish cake</div></div><div class="item-price">$9.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_tuna.jpg" alt="Tuna Gimbap"><div class="item-info"><div class="item-name">Tuna Gimbap</div><div class="item-desc">Tuna salad, mayo flavor, fragrant sesame leaf</div></div><div class="item-price">$9.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_spicy_pork.jpg" alt="Spicy Pork Wrap Gimbap"><div class="item-info"><div class="item-name">Spicy Pork Wrap Gimbap <span class="badge bs">Spicy</span></div><div class="item-desc">Korean spicy pork, lettuce wrap</div></div><div class="item-price">$9.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_shrimp.jpg" alt="Fried Shrimp Gimbap"><div class="item-info"><div class="item-name">Fried Shrimp Gimbap</div><div class="item-desc">Shrimp fries, savory</div></div><div class="item-price">$10.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_chicken_galbi.jpg" alt="Chicken Galbi Gimbap"><div class="item-info"><div class="item-name">Chicken Galbi Gimbap</div><div class="item-desc">Flame broiled chicken, soy sauce BBQ</div></div><div class="item-price">$10.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_bulgogi.jpg" alt="Bulgogi Gimbap"><div class="item-info"><div class="item-name">Bulgogi Gimbap</div><div class="item-desc">Sweet and salty bulgogi, soy sauce flavor</div></div><div class="item-price">$10.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_keto.jpg" alt="Keto Gimbap"><div class="item-info"><div class="item-name">Keto Gimbap</div><div class="item-desc">Low carb, diet & well-being food</div></div><div class="item-price">$10.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_chicken_mayo.jpg" alt="Fried Chicken Mayo Gimbap"><div class="item-info"><div class="item-name">Fried Chicken Mayo Gimbap</div><div class="item-desc">Fried chicken & mayo</div></div><div class="item-price">$10.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/gimbap_beef_rib.jpg" alt="Beef Rib Gimbap"><div class="item-info"><div class="item-name">Beef Rib Gimbap</div><div class="item-desc">Flame broiled beef rib BBQ</div></div><div class="item-price">$10.99</div></div>
+    <div class="sec-title">Party Platter</div>
+    <div class="party-box"><img class="party-img" src="images/party_platter.jpg" alt="Party Platter"><div class="party-info"><div class="party-price">$50</div><div class="party-desc">Choose your own — pick any 5 kimbap rolls</div></div></div>
   </div>
 
   <!-- FRIED -->
   <div id="tab-fried" class="section">
-    <div class="item-card">
-      <div class="item-info">
-        <div class="item-name">Jaws Fried Chicken <span class="badge badge-popular">Best Seller</span></div>
-        <div class="item-desc">Fried boneless chicken breast</div>
-        <div class="item-desc" style="margin-top:6px;">3 pcs — $5.99 &nbsp;·&nbsp; 6 pcs — $9.99 &nbsp;·&nbsp; 9 pcs — $13.99</div>
-        <div class="item-desc">+ Sweet & Sour Sauce — $0.99</div>
-      </div>
-    </div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Cheese Sticks (2 pcs)</div></div><div class="item-price">$3.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Cheese Balls (3 pcs)</div></div><div class="item-price">$4.99</div></div>
-    <div class="section-title">Add Deep Fried Items</div>
-    <div class="topping-row"><span>Sweet Potato, Seaweed Roll, Dumpling</span><span style="color:#D32F2F;font-weight:600;">$2.00/ea</span></div>
-    <div class="topping-row"><span>Assorted Vegetables, Cheese Stick</span><span style="color:#D32F2F;font-weight:600;">$2.25/ea</span></div>
-    <div class="topping-row"><span>Squid, Shrimp, Cheese Ball</span><span style="color:#D32F2F;font-weight:600;">$2.50/ea</span></div>
+    <div class="item-card"><img class="item-img" src="images/fried_chicken.jpg" alt="Jaws Fried Chicken"><div class="item-info"><div class="item-name">Jaws Fried Chicken <span class="badge bp">Best Seller</span></div><div class="item-desc">Fried boneless chicken breast</div><div class="item-desc" style="margin-top:4px">3 pcs $5.99 · 6 pcs $9.99 · 9 pcs $13.99</div><div class="item-desc">+ Sweet & Sour Sauce $0.99</div></div></div>
+    <div class="item-card"><img class="item-img" src="images/fried_sticks.jpg" alt="Cheese Sticks"><div class="item-info"><div class="item-name">Cheese Sticks (2 pcs)</div></div><div class="item-price">$3.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/fried_balls.jpg" alt="Cheese Balls"><div class="item-info"><div class="item-name">Cheese Balls (3 pcs)</div></div><div class="item-price">$4.99</div></div>
+    <div class="sec-title">Add Deep Fried Items</div>
+    <div class="trow"><span>Sweet Potato, Seaweed Roll, Dumpling</span><span class="tprice">$2.00/ea</span></div>
+    <div class="trow"><span>Assorted Vegetables, Cheese Stick</span><span class="tprice">$2.25/ea</span></div>
+    <div class="trow"><span>Squid, Shrimp, Cheese Ball</span><span class="tprice">$2.50/ea</span></div>
   </div>
 
   <!-- RAMEN -->
   <div id="tab-ramen" class="section">
-    <div class="section-title">DIY Ramen <span style="font-size:11px;text-transform:none;letter-spacing:0;">(+$0.50 green onion)</span></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Jin Ramen (Mild)</div></div><div class="item-price">$6.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Jin Ramen (Spicy) <span class="badge badge-spicy">Spicy</span></div></div><div class="item-price">$6.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Shin Ramen <span class="badge badge-spicy">Spicy</span></div></div><div class="item-price">$6.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Buldak <span class="badge badge-spicy">🔥 Very Spicy</span></div></div><div class="item-price">$7.49</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Carbo Buldak</div></div><div class="item-price">$7.49</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Chapagetti</div><div class="item-desc">Black bean noodles</div></div><div class="item-price">$7.49</div></div>
-    <div class="topping-row" style="margin-top:4px;"><span>Toppings</span><span style="color:#D32F2F;font-weight:600;">+$1.50</span></div>
-    <div class="section-title">DIY Ramen Combo</div>
-    <div class="ramen-combo"><div class="combo-name">Combo 1</div><div class="combo-inc">Ramen + Seasoned Rice</div><div class="combo-price">from $7.99</div></div>
-    <div class="ramen-combo"><div class="combo-name">Combo 2</div><div class="combo-inc">Ramen + Milk</div><div class="combo-price">from $8.99</div></div>
-    <div class="ramen-combo"><div class="combo-name">Combo 3</div><div class="combo-inc">Ramen + Gimbap</div><div class="combo-price">from $13.99</div></div>
+    <div class="sec-title">DIY Ramen <span style="font-size:11px;text-transform:none;letter-spacing:0">(+$0.50 green onion)</span></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/ramen_jin_mild.jpg" alt="Jin Ramen Mild"><div class="ramen-info"><div class="ramen-name">Jin Ramen (Mild)</div><div class="ramen-price">$6.99</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/ramen_jin_spicy.jpg" alt="Jin Ramen Spicy"><div class="ramen-info"><div class="ramen-name">Jin Ramen (Spicy) <span class="badge bs">Spicy</span></div><div class="ramen-price">$6.99</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/ramen_shin.jpg" alt="Shin Ramen"><div class="ramen-info"><div class="ramen-name">Shin Ramen <span class="badge bs">Spicy</span></div><div class="ramen-price">$6.99</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/ramen_buldak.jpg" alt="Buldak"><div class="ramen-info"><div class="ramen-name">Buldak 🔥</div><div class="ramen-price">$7.49</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/ramen_carbo.jpg" alt="Carbo Buldak"><div class="ramen-info"><div class="ramen-name">Carbo Buldak</div><div class="ramen-price">$7.49</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/ramen_chapa.jpg" alt="Chapagetti"><div class="ramen-info"><div class="ramen-name">Chapagetti</div><div style="font-size:12px;color:#888">Black bean noodles</div><div class="ramen-price">$7.49</div></div></div>
+    <div class="trow" style="margin-top:4px"><span>Toppings</span><span class="tprice">+$1.50</span></div>
+    <div class="sec-title">DIY Ramen Combo</div>
+    <div class="ramen-card"><img class="ramen-img" src="images/combo1.jpg" alt="Combo 1"><div class="ramen-info"><div class="ramen-name">Combo 1</div><div style="font-size:12px;color:#888">Ramen + Seasoned Rice</div><div class="ramen-price">from $7.99</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/combo2.jpg" alt="Combo 2"><div class="ramen-info"><div class="ramen-name">Combo 2</div><div style="font-size:12px;color:#888">Ramen + Milk</div><div class="ramen-price">from $8.99</div></div></div>
+    <div class="ramen-card"><img class="ramen-img" src="images/combo3.jpg" alt="Combo 3"><div class="ramen-info"><div class="ramen-name">Combo 3</div><div style="font-size:12px;color:#888">Ramen + Gimbap</div><div class="ramen-price">from $13.99</div></div></div>
   </div>
 
   <!-- SIDES -->
   <div id="tab-sides" class="section">
-    <div class="item-card"><div class="item-info"><div class="item-name">Jaws Korean Sausage</div><div class="item-desc">Sweet rice soondae with pork intestines</div></div><div class="item-price">$8.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Sausage Only</div></div><div class="item-price">$8.49</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Assorted Fish Cake Soup</div></div><div class="item-price">$9.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Deep Fried Set (M)</div><div class="item-desc">2 seaweed roll, shrimp, sweet potato, squid & dumpling</div></div><div class="item-price">$9.99</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Deep Fried Set (L)</div><div class="item-desc">2 seaweed roll, 2 dumpling, shrimp, sweet potato, assorted vegetables & cheese stick</div></div><div class="item-price">$12.99</div></div>
-    <div class="section-title">Dipping Sauce (+$0.50 each)</div>
+    <div class="item-card"><img class="item-img" src="images/side_sausage.jpg" alt="Jaws Korean Sausage"><div class="item-info"><div class="item-name">Jaws Korean Sausage</div><div class="item-desc">Sweet rice soondae with pork intestines</div><div class="item-desc" style="color:#bbb;margin-top:2px">Sausage Only: $8.49</div></div><div class="item-price">$8.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/side_fishcake.jpg" alt="Fish Cake Soup"><div class="item-info"><div class="item-name">Assorted Fish Cake Soup</div></div><div class="item-price">$9.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/side_fried_m.jpg" alt="Deep Fried Set M"><div class="item-info"><div class="item-name">Deep Fried Set (M)</div><div class="item-desc">2 seaweed roll, shrimp, sweet potato, squid & dumpling</div></div><div class="item-price">$9.99</div></div>
+    <div class="item-card"><img class="item-img" src="images/side_fried_l.jpg" alt="Deep Fried Set L"><div class="item-info"><div class="item-name">Deep Fried Set (L)</div><div class="item-desc">2 seaweed roll, 2 dumpling, shrimp, sweet potato, vegetables & cheese stick</div></div><div class="item-price">$12.99</div></div>
+    <div class="sec-title">Dipping Sauce (+$0.50 each)</div>
     <div class="sauce-grid">
-      <div class="sauce-item">Spicy Mayo <span>+$0.50</span></div>
-      <div class="sauce-item">Sriracha Mayo <span>+$0.50</span></div>
-      <div class="sauce-item">Wasabi Mayo <span>+$0.50</span></div>
-      <div class="sauce-item">Whole Grain Mustard <span>+$0.50</span></div>
+      <div class="sauce-item">Spicy Mayo<span>+$0.50</span></div>
+      <div class="sauce-item">Sriracha Mayo<span>+$0.50</span></div>
+      <div class="sauce-item">Wasabi Mayo<span>+$0.50</span></div>
+      <div class="sauce-item">Whole Grain Mustard<span>+$0.50</span></div>
     </div>
   </div>
 
   <!-- SPECIALS -->
   <div id="tab-specials" class="section">
-    <p style="font-size:13px;color:#888;margin-bottom:12px;">Weekday deals — available Monday through Friday</p>
-    <div class="weekday-card"><div class="weekday-header">Monday</div><div class="weekday-body"><div class="weekday-deal">Spicy Pork Bowl Combo</div><div class="weekday-inc">Includes Udon Soup & Soda</div><div class="weekday-price">$13.99</div></div></div>
-    <div class="weekday-card"><div class="weekday-header">Tuesday</div><div class="weekday-body"><div class="weekday-deal">Half-Size Topokki & Milk</div><div class="weekday-inc">Size up +$5</div><div class="weekday-price">$9.99</div></div></div>
-    <div class="weekday-card"><div class="weekday-header">Wednesday</div><div class="weekday-body"><div class="weekday-deal">Chicken Galbi Rice Bowl Combo</div><div class="weekday-inc">Includes Udon Soup & Soda</div><div class="weekday-price">$13.99</div></div></div>
-    <div class="weekday-card"><div class="weekday-header">Thursday</div><div class="weekday-body"><div class="weekday-deal">Bulgogi Rice Bowl Combo</div><div class="weekday-inc">Includes Udon Soup & Soda</div><div class="weekday-price">$13.99</div></div></div>
-    <div class="weekday-card"><div class="weekday-header">Friday</div><div class="weekday-body"><div class="weekday-deal">Boneless Fried Chicken Combo</div><div class="weekday-inc">Boneless fried chicken (6 pcs) + Soda</div><div class="weekday-price">$10.99</div></div></div>
+    <p style="font-size:13px;color:#888;margin-bottom:12px">Weekday deals — Mon through Fri</p>
+    <div class="wday-card"><div class="wday-label">Mon</div><img class="wday-img" src="images/special_monday.jpg" alt="Monday"><div class="wday-body"><div class="wday-deal">Spicy Pork Bowl Combo</div><div class="wday-inc">Includes Udon Soup & Soda</div><div class="wday-price">$13.99</div></div></div>
+    <div class="wday-card"><div class="wday-label">Tue</div><img class="wday-img" src="images/special_tuesday.jpg" alt="Tuesday"><div class="wday-body"><div class="wday-deal">Half-Size Topokki & Milk</div><div class="wday-inc">Size up +$5</div><div class="wday-price">$9.99</div></div></div>
+    <div class="wday-card"><div class="wday-label">Wed</div><img class="wday-img" src="images/special_wednesday.jpg" alt="Wednesday"><div class="wday-body"><div class="wday-deal">Chicken Galbi Rice Bowl Combo</div><div class="wday-inc">Includes Udon Soup & Soda</div><div class="wday-price">$13.99</div></div></div>
+    <div class="wday-card"><div class="wday-label">Thu</div><img class="wday-img" src="images/special_thursday.jpg" alt="Thursday"><div class="wday-body"><div class="wday-deal">Bulgogi Rice Bowl Combo</div><div class="wday-inc">Includes Udon Soup & Soda</div><div class="wday-price">$13.99</div></div></div>
+    <div class="wday-card"><div class="wday-label">Fri</div><img class="wday-img" src="images/special_friday.jpg" alt="Friday"><div class="wday-body"><div class="wday-deal">Boneless Fried Chicken Combo</div><div class="wday-inc">Boneless fried chicken (6 pcs) + Soda</div><div class="wday-price">$10.99</div></div></div>
   </div>
 
   <!-- DRINKS -->
   <div id="tab-drinks" class="section">
-    <div class="item-card"><div class="item-info"><div class="item-name">Sikhye Slushie</div><div class="item-desc">Korean traditional sweet rice beverage</div></div><div class="item-price">$4.25</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Jaws Slushie <span class="badge badge-popular">Signature</span></div><div class="item-desc">Strawberry · Blue Raspberry</div></div><div class="item-price">$4.00</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Coca-Cola / Diet Cola / Sprite</div></div><div class="item-price">$2.00</div></div>
+    <div class="item-card"><img class="item-img" src="images/drink_sikhye.jpg" alt="Sikhye Slushie"><div class="item-info"><div class="item-name">Sikhye Slushie</div><div class="item-desc">Korean traditional sweet rice beverage</div></div><div class="item-price">$4.25</div></div>
+    <div class="item-card"><img class="item-img" src="images/drink_slushie.jpg" alt="Jaws Slushie"><div class="item-info"><div class="item-name">Jaws Slushie <span class="badge bp">Signature</span></div><div class="item-desc">Strawberry · Blue Raspberry</div></div><div class="item-price">$4.00</div></div>
+    <div class="item-card"><img class="item-img" src="images/drink_cola.jpg" alt="Drinks"><div class="item-info"><div class="item-name">Coca-Cola / Diet Cola / Sprite</div></div><div class="item-price">$2.00</div></div>
+    <div class="item-card"><img class="item-img" src="images/drink_milk.jpg" alt="Milk"><div class="item-info"><div class="item-name">Milk</div><div class="item-desc">Banana · Strawberry</div></div><div class="item-price">$2.75</div></div>
     <div class="item-card"><div class="item-info"><div class="item-name">Water</div></div><div class="item-price">$1.50</div></div>
-    <div class="item-card"><div class="item-info"><div class="item-name">Milk</div><div class="item-desc">Banana · Strawberry</div></div><div class="item-price">$2.75</div></div>
   </div>
 
   <div class="footer">Images may differ from actual portions · Prices subject to change</div>
 </div>
-
 <script>
-function showTab(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
-  btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  btn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
 }
 </script>
 </body>
